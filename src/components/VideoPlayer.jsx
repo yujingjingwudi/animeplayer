@@ -20,10 +20,12 @@ videojs.addLanguage("zh-CN", {
   Loaded: "已加载",
   Progress: "进度",
   Fullscreen: "全屏",
-  "Non-Fullscreen": "退出全屏",
+  "Exit Fullscreen": "退出全屏",
   Mute: "静音",
   Unmute: "取消静音",
   "Playback Rate": "播放速度",
+  "Seek back 5 seconds": "快退 5 秒",
+  "Seek forward 5 seconds": "快进 5 秒",
   Subtitles: "字幕",
   Captions: "字幕",
   Chapters: "章节",
@@ -48,25 +50,6 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
-function applyChineseControlText(player) {
-  const labels = [
-    [".vjs-play-control", "播放 / 暂停"],
-    [".vjs-mute-control", "静音 / 取消静音"],
-    [".vjs-volume-panel", "音量"],
-    [".vjs-picture-in-picture-control", "画中画"],
-    [".vjs-fullscreen-control", "全屏 / 退出全屏"],
-    [".vjs-playback-rate .vjs-playback-rate-value", "播放速度"],
-    [".vjs-seek-button.skip-back", `快退 ${SEEK_SECONDS} 秒`],
-    [".vjs-seek-button.skip-forward", `快进 ${SEEK_SECONDS} 秒`],
-  ];
-
-  labels.forEach(([selector, label]) => {
-    player.el().querySelectorAll(selector).forEach((element) => {
-      element.setAttribute("title", label);
-      element.setAttribute("aria-label", label);
-    });
-  });
-}
 
 function installKeyboardShortcuts(player) {
   const handleKeyDown = (event) => {
@@ -162,15 +145,11 @@ export function VideoPlayer({ anime, episode }) {
         back: SEEK_SECONDS,
       });
 
-      playerRef.current.ready(() => {
-        applyChineseControlText(playerRef.current);
-      });
     } else {
       playerRef.current.poster(anime.banner);
       playerRef.current.src({ src: demoVideoSource, type: "video/mp4" });
       playerRef.current.load();
       playerRef.current.el().setAttribute("data-title", `${anime.title} 第 ${episode} 集`);
-      applyChineseControlText(playerRef.current);
     }
 
     return undefined;
