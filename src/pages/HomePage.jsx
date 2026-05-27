@@ -1,10 +1,11 @@
-import { ChevronRight, Clock3, Flame, Play, Search, Star } from "lucide-react";
+import { ChevronRight, Clock3, Flame, Play, Star } from "lucide-react";
+import React from "react";
 import { HeroCarousel } from "../components/HeroCarousel";
+import { SearchForm } from "../components/Header";
 import { RouteLink } from "../components/RouteLink";
 import { SchedulePanel } from "../components/SchedulePanel";
 import { animeList, rankings } from "../data/anime";
 import { categories } from "../data/schedule";
-import React, { useMemo } from "react";
 
 export function HomePage({ navigate }) {
   return (
@@ -12,15 +13,12 @@ export function HomePage({ navigate }) {
       <HeroCarousel navigate={navigate} />
 
       <section className="mobile-search" aria-label="搜索">
-        <label className="search-box">
-          <Search size={18} aria-hidden="true" />
-          <input type="search" placeholder="搜索番剧、声优、标签" />
-        </label>
+        <SearchForm navigate={navigate} />
       </section>
 
       <section className="category-strip" aria-label="分类">
         {categories.map((category) => (
-          <a className={category === "推荐" ? "chip active" : "chip"} href="#" key={category}>
+          <a className={category === "鎺ㄨ崘" ? "chip active" : "chip"} href="#" key={category}>
             {category}
           </a>
         ))}

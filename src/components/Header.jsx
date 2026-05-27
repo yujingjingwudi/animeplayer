@@ -1,6 +1,25 @@
 import { Bell, Menu, Search, Tv } from "lucide-react";
+import React from "react";
 import { RouteLink } from "./RouteLink";
-import React, { useMemo } from "react";
+
+export function SearchForm({ navigate }) {
+  return (
+    <form
+      className="search-box"
+      role="search"
+      onSubmit={(event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const query = String(formData.get("q") || "").trim();
+
+        navigate(query ? `/search?q=${encodeURIComponent(query)}` : "/search");
+      }}
+    >
+      <Search size={18} aria-hidden="true" />
+      <input name="q" type="search" placeholder="搜索番剧、声优、标签" />
+    </form>
+  );
+}
 
 export function Header({ navigate, pathname }) {
   return (
@@ -9,7 +28,7 @@ export function Header({ navigate, pathname }) {
         <span className="brand-mark">
           <Tv size={19} aria-hidden="true" />
         </span>
-        <span>漫映</span>
+        <span>漫影</span>
       </RouteLink>
 
       <nav className="desktop-nav" aria-label="频道">
@@ -28,10 +47,7 @@ export function Header({ navigate, pathname }) {
       </nav>
 
       <div className="top-actions">
-        <label className="search-box">
-          <Search size={18} aria-hidden="true" />
-          <input type="search" placeholder="搜索番剧、声优、标签" />
-        </label>
+        <SearchForm navigate={navigate} />
         <button className="icon-button" aria-label="通知">
           <Bell size={20} aria-hidden="true" />
         </button>

@@ -7,9 +7,10 @@ import { DetailPage } from "./pages/DetailPage";
 import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { PlayPage } from "./pages/PlayPage";
+import { SearchPage } from "./pages/SearchPage";
 
 export function App() {
-  const { route, navigate, pathname } = useRouter();
+  const { route, navigate, pathname, search } = useRouter();
   const anime = useMemo(() => animeList.find((item) => item.id === route.id), [route.id]);
 
   let page = <HomePage navigate={navigate} />;
@@ -24,6 +25,10 @@ export function App() {
     ) : (
       <NotFoundPage navigate={navigate} />
     );
+  }
+
+  if (route.name === "search") {
+    page = <SearchPage navigate={navigate} search={search} />;
   }
 
   if (route.name === "notFound") {

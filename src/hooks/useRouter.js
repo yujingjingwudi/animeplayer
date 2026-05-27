@@ -15,28 +15,39 @@ function getRoute(pathname) {
     return { name: "detail", id: parts[1] };
   }
 
+  if (parts[0] === "search") {
+    return { name: "search" };
+  }
+
   return { name: "notFound" };
 }
 
 export function useRouter() {
   const [pathname, setPathname] = useState(window.location.pathname);
+  const [search, setSearch] = useState(window.location.search);
 
   useEffect(() => {
-    const handlePopState = () => setPathname(window.location.pathname);
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+      setSearch(window.location.search);
+    };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   const navigate = (path) => {
-    if (path === window.location.pathname) {
+    const currentPath = `${window.location.pathname}${window.location.search}`;
+
+    if (path === currentPath) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     window.history.pushState({}, "", path);
-    setPathname(path);
+    setPathname(window.location.pathname);
+    setSearch(window.location.search);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return { route: getRoute(pathname), navigate, pathname };
+  return { route: getRoute(pathname), navigate, pathname, search };
 }
